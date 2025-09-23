@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fake Discord Token Generator — Letters & Digits Only</title>
+  <style>
+    :root { font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, "Helvetica Neue", Arial; margin: 0; }
+    body { display: flex; min-height: 100vh; align-items: center; justify-content: center;
+           background: #0f172a; color: #e6eef8; padding: 24px; }
+    .card { background: linear-gradient(180deg,#111827,#0b1220);
+            border: 1px solid rgba(255,255,255,0.04);
+            padding: 24px; border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+            width: 760px; max-width: 100%; }
+    h1 { margin: 0 0 8px; font-size: 20px; }
+    p  { margin: 0 0 16px; color: #9fb0d6; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    button { background: #0ea5a3; border: 0; padding: 10px 14px; border-radius: 8px;
+             color: #022; cursor: pointer; font-weight: 600; }
+    button.ghost { background: transparent; border: 1px solid rgba(255,255,255,0.06); color: #cfe7ff; }
+    input.token { width: 100%; padding: 12px; border-radius: 8px;
+                  border: 1px solid rgba(255,255,255,0.04);
+                  background: rgba(255,255,255,0.02);
+                  color: #fff; font-family: monospace; font-size: 14px; }
+    .note { font-size: 13px; color: #ffd7d7;
+            background: rgba(255,50,50,0.06);
+            padding: 10px; border-radius: 8px; margin-top: 12px; }
+    .meta { font-size: 12px; color: #8fb0d9; margin-top: 8px; }
+    .footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+    a { color: #7dd3fc; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Fake Discord Token Gen - for sucking dicks at 1am</h1>
+    <p>this nigger ass tool only creates fake ass tokens for no reason at all. <strong>Nigger</strong> gonna give you up, never gonna let u down</p>
+
+    <div class="controls">
+      <button id="genBtn">Generate token</button>
+      <button id="copyBtn" class="ghost">Copy to clipboard</button>
+      <button id="downloadBtn" class="ghost">Download .txt</button>
+    </div>
+
+    <input class="token" id="tokenField" readonly aria-label="generated token" value="">
+
+    <div class="meta">
+      Output format: <code>MTQxOTgxNzAzMzg1OTU5NjQxOA.GDHU03.xxxxxxxxx... (like anyone asked lol)</code>  
+    </div>
+
+    <div class="note">
+      ⚠️ <strong>goofy reminder:</strong> These strings are for idiots that don't know how to properly scam, use these anywhere u fucking want
+    </div>
+
+    <div class="footer">
+      <div>Made by Proxyshart on discord (@meowinc_)</div>
+      <div style="font-size:12px;color:#6fb3d9">Built with cum on my bed from last night's fun</div>
+    </div>
+  </div>
+
+  <script>
+    // Fixed prefix segments
+    const FIXED_PREFIX = 'MTQxOTgxNzAzMzg1OTU5NjQxOA.GDHU03';
+
+    // Secure random integer
+    function randInt(max) {
+      const r = new Uint32Array(1);
+      crypto.getRandomValues(r);
+      return r[0] % max;
+    }
+
+    // Letters + digits only
+    const TAIL_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    function randomString(length) {
+      let out = '';
+      const n = TAIL_CHARS.length;
+      for (let i = 0; i < length; i++) out += TAIL_CHARS.charAt(randInt(n));
+      return out;
+    }
+
+    let tailLen = 37; // default length similar to your sample
+
+    function generateToken() {
+      return `${FIXED_PREFIX}.${randomString(tailLen)}`;
+    }
+
+    const tokenField  = document.getElementById('tokenField');
+    const genBtn      = document.getElementById('genBtn');
+    const copyBtn     = document.getElementById('copyBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    genBtn.addEventListener('click', () => {
+      tokenField.value = generateToken();
+      tokenField.select();
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      if (!tokenField.value) tokenField.value = generateToken();
+      try {
+        await navigator.clipboard.writeText(tokenField.value);
+        copyBtn.textContent = 'Copied!';
+        setTimeout(() => copyBtn.textContent = 'Copy to clipboard', 1500);
+      } catch {
+        alert('Copy failed — your browser may block clipboard access.');
+      }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      if (!tokenField.value) tokenField.value = generateToken();
+      const blob = new Blob([tokenField.value + '\\n'], { type: 'text/plain' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url;
+      a.download = 'fake-discord-token.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Allow changing tail length by double-clicking the title
+    document.querySelector('h1').addEventListener('dblclick', () => {
+      const v = prompt('Tail length (current ' + tailLen + '):', String(tailLen));
+      const n = parseInt(v, 10);
+      if (Number.isInteger(n) && n > 0) tailLen = n;
+      else alert('Invalid length — unchanged.');
+    });
+
+    // Generate one on load
+    tokenField.value = generateToken();
+  </script>
+</body>
+</html>
